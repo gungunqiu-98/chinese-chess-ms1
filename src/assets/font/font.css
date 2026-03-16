@@ -1,0 +1,35 @@
+/*思源黑体 - 细体*/
+@font-face {
+    font-family:'FZCYJ-Light';
+    src: url('SourceHanSansCN-Light.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+/*常规*/
+@font-face {
+    font-family:'FZCYJ-Normal';
+    src: url('SourceHanSansCN-Normal.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+/*中号*/
+@font-face {
+    font-family:'FZCYJ-Medium';
+    src: url('SourceHanSansCN-Medium.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+/*普通*/
+@font-face {
+    font-family:'FZCYJ-Regular';
+    src: url('SourceHanSansCN-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+/*粗体*/
+@font-face {
+    font-family:'FZCYJ-Bold';
+    src: url('SourceHanSansCN-Bold.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
