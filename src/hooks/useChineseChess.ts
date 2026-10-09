@@ -1,5 +1,5 @@
 /* 
-  象棋游戏核心逻辑 
+实现象棋的核心逻辑 
 */
 
 import { useCallback, useEffect, useMemo, useState, type MouseEvent, type RefObject } from 'react';
@@ -8,6 +8,8 @@ import { applyMove, cloneBoard, genLegalMoves, getPiecePlayer, initBoard } from 
 import type { Board, GameSnapshot, Player, Position } from '../chess/types';
 
 export const useChineseChess = (canvasRef: RefObject<HTMLCanvasElement | null>) => {
+  // 棋盘、下棋、执棋方、悔棋
+  const [winner, setWinner] = useState<Player | null>(null)
   const [board, setBoard] = useState<Board>(() => initBoard());
   const [selected, setSelected] = useState<Position | null>(null);
   const [currentPlayer, setCurrentPlayer] = useState<Player>('red');
@@ -19,9 +21,12 @@ export const useChineseChess = (canvasRef: RefObject<HTMLCanvasElement | null>) 
     return genLegalMoves(board, selected);
   }, [board, selected]);
 
-  // 处理画布点击事件，实现棋子选择和移动
+  // 处理画布点击事件，实现棋子选择和移动，
+  // ‼️依赖数组加上winner。否则回调会一直捕获初始winner，导致分出胜负之后还能继续走子 ———— React闭包陷阱的坑
   const handleCanvasClick = useCallback(
     (event: MouseEvent<HTMLCanvasElement>) => {
+      if(winner) return;
+      
       const canvas = canvasRef.current;
       if (!canvas) return;
 
@@ -51,14 +56,22 @@ export const useChineseChess = (canvasRef: RefObject<HTMLCanvasElement | null>) 
         return;
       }
 
-      // setState的函数式写法：新的棋盘状态和历史记录
+      // 快照。setState的函数式写法：新的棋盘状态和历史记录
       setHistory((prev) => [...prev, { board: cloneBoard(board), currentPlayer }]);
+      const captured = board[pos.row][pos.col]
       const nextBoard = applyMove(board, selected, pos);
       setBoard(nextBoard);
       setSelected(null);
+
+      // ‼️边界情况：吃将判胜
+      if(captured === 'K' || captured === 'k'){
+        setWinner(currentPlayer);
+        return;
+      }
+
       setCurrentPlayer(currentPlayer === 'red' ? 'black' : 'red');
     },
-    [board, canvasRef, currentPlayer, legalMoves, selected],
+    [board, canvasRef, currentPlayer, legalMoves, selected, winner],
   );
 
   // 悔棋函数，从历史记录中恢复上一步状态
@@ -69,6 +82,8 @@ export const useChineseChess = (canvasRef: RefObject<HTMLCanvasElement | null>) 
       setBoard(snapshot.board);
       setCurrentPlayer(snapshot.currentPlayer);
       setSelected(null);
+      // ‼️边界情况：悔棋能复活对局
+      setWinner(null);
       return prev.slice(0, -1);
     });
   }, [setBoard, setCurrentPlayer, setSelected]);
@@ -78,6 +93,7 @@ export const useChineseChess = (canvasRef: RefObject<HTMLCanvasElement | null>) 
     setBoard(initBoard());
     setCurrentPlayer('red');
     setSelected(null);
+    setWinner(null);
     setHistory([]);
   }, []);
 
@@ -97,5 +113,6 @@ export const useChineseChess = (canvasRef: RefObject<HTMLCanvasElement | null>) 
     handleCanvasClick,
     handleUndo,
     handleReset,
+    winner,
   };
 };

@@ -1,5 +1,5 @@
 /* 
-  象棋规则核心 
+  象棋走子规则的核心 
 */
 import { colNum, rowNum } from './constants';
 import type { Board, Piece, Player, Position } from './types';

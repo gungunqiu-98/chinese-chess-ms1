@@ -1,52 +1,37 @@
-# Getting Started with Create React App
+# 介绍：CRA方式 对比 其他替代方式
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+文件是 CRA 生成的；内容 = CRA 样板 + 你自己追加的一段。
+- CRA 生成的文件（create-react-app 搭脚手架时创建的）
+- CRA 写的模板内容（它往文件里塞的样板代码）
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+CRA = Create React App,是 Meta(Facebook)官方出的 React 项目脚手架工具
+CRA 在 2025 年 2 月被 Meta 正式宣布弃用,仓库已归档,不再维护。react-scripts 5.0.1 就是最后一个主要版本
+常见替代：
+- Vite
+- Next.js(需要SSR/路由/全栈时用)
+- React Router 偏框架式方案
 
 
-## note
+React版本： React 19.1.1，2024 年底发布的
+||是什么|你的值|
+|---|---|---|
+|**React 版本**|React 库本身（`useState`、`useRef` 这些从哪来）|19.1.1|
+|**CRA 版本**（react-scripts）|打包/构建工具链|5.0.1|
+|**TypeScript 版本**|类型检查器|4.9.5 2022 年的|
+
+对比 React 18
+- 不需要 import React from 'react'
+  新的 JSX 转换（"jsx": "react-jsx"）下，JSX 会自动引入所需的东西
+- useRef 的签名变了
+  React 18：useRef<HTMLCanvasElement>(null) 返回 RefObject<HTMLCanvasElement>
+  React 19：返回 RefObject<HTMLCanvasElement | null>
+- ref 可以直接当普通 prop 传
+- 新的 Hooks
+  useActionState、useOptimistic、useFormStatus——都是围绕表单和异步提交的。你这个纯本地游戏用不上。
+- 服务端组件（RSC）
+  React 19 的大特性之一，但需要 Next.js 这类框架支持。CRA 用不上，所以对你完全是透明的——看到相关文章时不用管。
+
+# Note：重构之前的
 .css  样式文件
 .test.tsx文件  .test.ts文件，用于编写单元测试或组件测试（Jest）
 .ts   纯TypeScript逻辑文件              

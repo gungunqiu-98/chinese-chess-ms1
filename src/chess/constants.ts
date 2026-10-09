@@ -1,5 +1,6 @@
 import type { Piece } from './types';
 
+// 横线、树线、棋子大小、偏移
 export const colNum = 9;
 export const rowNum = 10;
 export const cell_size = 58;
