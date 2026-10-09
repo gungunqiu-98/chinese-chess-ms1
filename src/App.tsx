@@ -563,7 +563,7 @@ function App() {
                       </>
                   )}
               </div>
-              <button onClick={handleUndo} disabled={history.length === 0} style={{ padding: '6px 10px' }}>
+              <button onClick={handleUndo} disabled={historyLength === 0} style={{ padding: '6px 10px' }}>
                   悔棋
               </button>
               <button onClick={handleReset} style={{ padding: '6px 10px' }}>
