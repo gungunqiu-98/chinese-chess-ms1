@@ -41,3 +41,8 @@ export type GameSnapshot = {
   board: Board;
   currentPlayer: Player;
 };
+
+// 对局状态。
+// 注意象棋与国象的关键差异：将死（被将军且无棋可走）和困毙（未被将军但无棋可走）
+// 都算「轮到走棋的一方输」，没有和棋。本阶段不实现 60 回合、重复局面、长将等和棋规则。
+export type GameStatus = 'playing' | 'red-win' | 'black-win';

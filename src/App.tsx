@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import './App.css';
 import { colNum, rowNum, cell_size, offset_top, COLORS } from './chess/constants'
 import { useChineseChess } from './hooks/useChineseChess'
 

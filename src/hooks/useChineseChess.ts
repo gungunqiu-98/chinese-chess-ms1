@@ -4,7 +4,7 @@
 
 import { useCallback, useEffect, useMemo, useState, type MouseEvent, type RefObject } from 'react';
 import { drawBoard, getPosFromCanvasPoint } from '../chess/canvasBoard';
-import { applyMove, cloneBoard, genLegalMoves, getPiecePlayer, initBoard } from '../chess/engine';
+import { applyMove, cloneBoard, genLegalMoves, getGameStatus, getPiecePlayer, initBoard } from '../chess/engine';
 import type { Board, GameSnapshot, Player, Position } from '../chess/types';
 
 export const useChineseChess = (canvasRef: RefObject<HTMLCanvasElement | null>) => {
@@ -58,18 +58,21 @@ export const useChineseChess = (canvasRef: RefObject<HTMLCanvasElement | null>) 
 
       // 快照。setState的函数式写法：新的棋盘状态和历史记录
       setHistory((prev) => [...prev, { board: cloneBoard(board), currentPlayer }]);
-      const captured = board[pos.row][pos.col]
       const nextBoard = applyMove(board, selected, pos);
+      const nextPlayer: Player = currentPlayer === 'red' ? 'black' : 'red';
       setBoard(nextBoard);
       setSelected(null);
 
-      // ‼️边界情况：吃将判胜
-      if(captured === 'K' || captured === 'k'){
-        setWinner(currentPlayer);
+      // 走完这一步后，看轮到走棋的一方是否已经无棋可走 —— 将死和困毙在象棋里都判负。
+      // 原来的「吃掉对方的将就算赢」已经删掉了：合法走法会滤掉「走完自己被将军」的走法，
+      // 所以将再也走不到能被吃的位置，那个分支不可能触发。
+      const status = getGameStatus(nextBoard, nextPlayer);
+      if (status !== 'playing') {
+        setWinner(status === 'red-win' ? 'red' : 'black');
         return;
       }
 
-      setCurrentPlayer(currentPlayer === 'red' ? 'black' : 'red');
+      setCurrentPlayer(nextPlayer);
     },
     [board, canvasRef, currentPlayer, legalMoves, selected, winner],
   );
